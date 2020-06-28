@@ -48,7 +48,8 @@ class Graph
       # prevents visiting a node more than once.
       next if visited.include?(vertex)
 
-      # iterate over each adjacent node of vertex, create a new path, push it into queue
+      # iterate over each adjacent node of vertex,
+      # create a new path, push it into queue
       graph[vertex].each do |curr_node|
         new_path = Array.new(path)
         new_path << curr_node
