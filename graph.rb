@@ -41,7 +41,7 @@ class Graph
       # path starts with source. then will be first node in new_path
       path = queue.shift
       # set vertex to last node in path
-      vertex = path[-1]
+      vertex = path.last
       # stop loop if destination node is reached
       return path if vertex == dest
 
