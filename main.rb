@@ -1,13 +1,10 @@
-require_relative 'binary_search_tree/main.rb'
+require 'set'
 
+# maps the chess board
 class Board
-  attr_accessor :edges
-
+  attr_accessor :squares
+  
   def initialize
-    @edges = edge_list
-  end
-
-  def squares
     @squares = 
     [
       [0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
@@ -20,69 +17,85 @@ class Board
       [7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7],
     ]
   end
+end
 
-  def edge_list
+# initializes a new graph with allowed moves mapped to a hash (Graph#make_graph).
+# has one method that calls Graph#find_shortest_path
+# with parameters for start and end square.
+class Knight
+  def initialize
+    @graph = Graph.new
+  end
+
+  def moves(source, dest)
+    return 'move not allowed' unless allowed_move?(source, dest)
+
+    result = @graph.find_shortest_path(source, dest)
+    puts "You made it in #{result.count - 1} moves! Here's your path:"
+    result.each { |square| p square }
+  end
+
+  def allowed_move?(source, dest)
+    source.max <= 7 && dest.max <= 7 && source.min >= 0 && dest.min >= 0
+  end
+end
+
+# uses Board#squares to create a graph of allowed Knight movements.
+# uses Breadth-First Search to find the shortest path available for the Knight to move.
+class Graph
+  attr_accessor :graph
+
+  def initialize
+    @board = Board.new
+    @graph = make_graph
+  end
+
+  def make_graph
     hash = {}
-    squares.each do |vertex|
-      x = vertex[0]
-      y = vertex[1]
-      hash[vertex] = find_edges(x, y)
+    @board.squares.each do |square|
+      x = square[0]
+      y = square[1]
+      hash[square] = adj_squares(x, y)
     end
     hash
   end
 
-  def find_edges(x, y)
-    result = []
-    # possible movements of Knight on x-axis and y-axis
+  def adj_squares(x, y)
+    squares = []
     dx = [2, 2, -2, -2, 1, 1, -1, -1]
     dy = [1, -1, 1, -1, 2, -2, 2, -2]
     dx.count.times do |n|
       if (x + dx[n]).between?(0, 7) && (y + dy[n]).between?(0, 7)
-        result << [x + dx[n], y + dy[n]]
+        squares << [x + dx[n], y + dy[n]]
       end
     end
-    result
+    squares
   end
 
-  def find_an_edge
-    edge_list.keys[0]
-  end
-end
+  def find_shortest_path(graph = @graph, source, dest)
 
-class Knight
-  attr_accessor :end_node, :edges
+    queue = [[source]]
+    visited = Set.new
 
-  def initialize
-    @board = Board.new
-    @edges = @board.edges
-    @start_node = nil
-    @end_node = nil
-  end
+    until queue.empty?
+      # path starts with source. then will be first node in new_path
+      path = queue.shift
+      # 
+      vertex = path[-1]
+      # stop loop if destination node is reached
+      return path if vertex == dest
 
-  def moves(start, finish)
-    puts "knight is en route from #{start} to #{finish}"
-    @start_node = start
-    puts "You made in x moves! Here's your path: "
-    #until end_node is equal to finish, update end_node to node that has a path to finish??
-    p start
-    @start_node = edges[start].root
-    edges.each_with_index { |edge, index| p edges[start].root }
-  end
-end
+      # prevent visiting a node more than once.
+      next if visited.include?(vertex)
+      # iterate over each adjacent node, create a new path, push it into queue
+      graph[vertex].each do |node|
+        new_path = Array.new(path)
+        new_path << node
+        queue << new_path
+        return new_path if node == dest
 
-class Vertex
-  def initialize(location, edges = nil)
-    @location = location
-    @edges = edges
+        end
+      visited << vertex
+    end
   end
 end
-
-  # > knight_moves([3,3],[4,3])
-  # => You made it in 3 moves!  Heres your path:
-  #   [3,3]
-  #   [4,5]
-  #   [2,4]
-  #   [4,3]
-
-#---------------------with graph class----------------------#
-
