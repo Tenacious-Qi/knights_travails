@@ -1,12 +1,12 @@
-require 'set'
+# frozen_string_literal: true
 
+require 'set'
 # maps the chess board
 class Board
   attr_accessor :squares
-  
+
   def initialize
-    @squares = 
-    [
+    @squares = [
       [0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
       [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7],
       [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7],
@@ -19,7 +19,7 @@ class Board
   end
 end
 
-# initializes a new graph with allowed moves mapped to a hash (Graph#make_graph).
+# initializes a new graph with allowed moves mapped to a hash (Graph#make_graph)
 # has one method that calls Graph#find_shortest_path
 # with parameters for start and end square.
 class Knight
@@ -41,7 +41,7 @@ class Knight
 end
 
 # uses Board#squares to create a graph of allowed Knight movements.
-# uses Breadth-First Search to find the shortest path available for the Knight to move.
+# uses Breadth-First Search to find the shortest path available for the Knight
 class Graph
   attr_accessor :graph
 
@@ -50,6 +50,7 @@ class Graph
     @graph = make_graph
   end
 
+  # creates a hash with squares as keys and allowed moves as values
   def make_graph
     hash = {}
     @board.squares.each do |square|
@@ -60,41 +61,44 @@ class Graph
     hash
   end
 
-  def adj_squares(x, y)
+  # finds possible moves
+  def adj_squares(x_ax, y_ax)
     squares = []
     dx = [2, 2, -2, -2, 1, 1, -1, -1]
     dy = [1, -1, 1, -1, 2, -2, 2, -2]
     dx.count.times do |n|
-      if (x + dx[n]).between?(0, 7) && (y + dy[n]).between?(0, 7)
-        squares << [x + dx[n], y + dy[n]]
+      if (x_ax + dx[n]).between?(0, 7) && (y_ax + dy[n]).between?(0, 7)
+        squares << [x_ax + dx[n], y_ax + dy[n]]
       end
     end
     squares
   end
 
-  def find_shortest_path(graph = @graph, source, dest)
-
+  # uses breadth first search to find the most direct route to destination
+  def find_shortest_path(source, dest, graph = @graph)
     queue = [[source]]
     visited = Set.new
 
     until queue.empty?
       # path starts with source. then will be first node in new_path
       path = queue.shift
-      # 
+      # set vertex to last node in path
       vertex = path[-1]
       # stop loop if destination node is reached
       return path if vertex == dest
 
-      # prevent visiting a node more than once.
+      # prevents visiting a node more than once.
       next if visited.include?(vertex)
-      # iterate over each adjacent node, create a new path, push it into queue
-      graph[vertex].each do |node|
-        new_path = Array.new(path)
-        new_path << node
-        queue << new_path
-        return new_path if node == dest
 
-        end
+      # iterate over each adjacent node, create a new path, push it into queue
+      graph[vertex].each do |curr_node|
+        new_path = Array.new(path)
+        new_path << curr_node
+        # stop loop if current node matches destination
+        return new_path if curr_node == dest
+
+        queue << new_path
+      end
       visited << vertex
     end
   end
