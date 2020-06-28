@@ -5,7 +5,7 @@ found [here](https://www.theodinproject.com/courses/ruby-programming/lessons/dat
 
 A _Knight_ in chess can get to any other square on the board given enough moves.
 The goal of this project is to write a function that, given a starting square and a destination square, returns the shortest path from start to destination, displaying each squares coordinates along the way.
-This project utilizes the BFS algorithm of the previous [Binary Search Tree project](https://github.com/Tenacious-Qi/binary_search_tree).
+This project utilizes a modified version of the BFS algorithm of the previous [Binary Search Tree project](https://github.com/Tenacious-Qi/binary_search_tree).
 
 ### Reflection
 
