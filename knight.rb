@@ -13,7 +13,7 @@ class Knight
   def moves(source, dest)
     return warn 'Move not allowed!' unless allowed_move?(source, dest)
 
-    result = @graph.find_shortest_path(source, dest)
+    result = graph.find_shortest_path(source, dest)
     puts "You made it in #{result.count - 1} moves! Here's your path:"
     result.each { |square| p square }
   end
