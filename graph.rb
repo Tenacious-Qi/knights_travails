@@ -38,7 +38,8 @@ class Graph
     visited = Set.new
 
     until queue.empty?
-      # path starts with source. then will be first node in new_path
+      # path starts with source. 
+      # then after iteration below, path will become first node in new_path
       path = queue.shift
       # set vertex to last node in path
       vertex = path.last
