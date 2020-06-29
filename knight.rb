@@ -4,8 +4,10 @@
 # has one method that calls Graph#find_shortest_path
 # with parameters for start and end square.
 class Knight
-  def initialize
-    @graph = Graph.new
+  attr_reader :graph
+
+  def initialize(graph = Graph.new)
+    @graph = graph
   end
 
   def moves(source, dest)

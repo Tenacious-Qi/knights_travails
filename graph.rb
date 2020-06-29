@@ -3,8 +3,10 @@
 # uses Board#squares to create a graph of allowed Knight movements.
 # uses Breadth-First Search to find the shortest path available for the Knight
 class Graph
-  def initialize
-    @board = Board.new
+  attr_reader :board
+  
+  def initialize(board = Board.new)
+    @board = board
     @graph = make_graph
   end
 
