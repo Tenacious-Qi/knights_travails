@@ -13,7 +13,7 @@ class Graph
   # creates a hash with squares as keys and allowed moves as values
   def make_graph
     hash = {}
-    @board.squares.each do |square|
+    board.squares.each do |square|
       x = square[0]
       y = square[1]
       hash[square] = adj_squares(x, y)
