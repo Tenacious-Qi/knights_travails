@@ -26,7 +26,7 @@ class Graph
     squares = []
     dx = [2, 2, -2, -2, 1, 1, -1, -1]
     dy = [1, -1, 1, -1, 2, -2, 2, -2]
-    dx.count.times do |n|
+    8.times do |n|
       if (x_ax + dx[n]).between?(0, 7) && (y_ax + dy[n]).between?(0, 7)
         squares << [x_ax + dx[n], y_ax + dy[n]]
       end
