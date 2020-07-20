@@ -35,28 +35,28 @@ class Graph
   end
 
   # uses breadth first search to find the most direct route to destination
+  # path starts with source. 
+  # after iteration, path will become first node in new_path
+  # set vertex to last node in path
+  # stop loop if destination node is reached
+  # prevent visiting a node more than once.
+  # iterate over each adjacent node of vertex,
+  # create a new path, push it into queue
+  # stop loop if current node matches destination
   def find_shortest_path(source, dest, graph = @graph)
     queue = [[source]]
     visited = Set.new
 
     until queue.empty?
-      # path starts with source. 
-      # then after iteration below, path will become first node in new_path
       path = queue.shift
-      # set vertex to last node in path
       vertex = path.last
-      # stop loop if destination node is reached
       return path if vertex == dest
 
-      # prevents visiting a node more than once.
       next if visited.include?(vertex)
 
-      # iterate over each adjacent node of vertex,
-      # create a new path, push it into queue
       graph[vertex].each do |curr_node|
         new_path = Array.new(path)
         new_path << curr_node
-        # stop loop if current node matches destination
         return new_path if curr_node == dest
 
         queue << new_path
